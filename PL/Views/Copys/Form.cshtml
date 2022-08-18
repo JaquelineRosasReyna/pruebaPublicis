@@ -1,0 +1,158 @@
+﻿@model ML.Copys
+@{
+    ViewData["Title"] = "Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>@ViewBag.Titulo </h3>
+                 <h2>COPYS </h2>
+                <h5>Ingrese los datos </h5>
+                </hr>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            @using (Html.BeginForm("Form", "Copys", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <div class="row">
+                    @Html.HiddenFor(model => model.Action)
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Id, new { @class = "control-label col-md2 " })
+                        @Html.TextBoxFor(model => model.Id, new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Medio, new { @class = "control-label col-md2 " })
+                        @Html.TextBoxFor(model => model.Medio, new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Fecha, new { @class = "control-label col-md2 " })
+                        @Html.TextBoxFor(model => model.Fecha, new { @class = "form-control", @id = "txtFechaNacimiento" })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Marca, new { @class = "control-label col-md2 " })
+                        @Html.TextBoxFor(model => model.Marca, new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Producto, new { @class = "control-label col-md2 " })
+                        @Html.TextBoxFor(model => model.Producto, new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Version, new { @class = "control-label col-md2 " })
+                        @Html.TextBoxFor(model => model.Version, new { @class = "form-control" })
+                    </div>
+
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Vehiculo, new { @class = "control-label col-md2 " })
+                        @Html.TextBoxFor(model => model.Vehiculo, new { @class = "form-control"})
+                    </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Anunciante, new { @class = "control-label col-md2 " })
+                        @Html.TextBoxFor(model => model.Anunciante, new { @class = "form-control"})
+                    </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Tema, new { @class = "control-label col-md2 " })
+                        @Html.TextBoxFor(model => model.Tema, new { @class = "form-control"})
+                    </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Categories, new { @class = "control-label col-md2 " })
+                        @Html.DropDownListFor(model => model.Categories.Id, new SelectList(Model.Categories.categories, "Id", "Name"), "Selecciona una opcion", new { @class = "form-control"})
+                    </div>
+
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.Processing)
+                        <br />
+                        True
+                        @Html.RadioButtonFor(model => model.Processing, "True")
+                        False
+                        @Html.RadioButtonFor(model => model.Processing, "False")
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            @Html.LabelFor(model=> model.File)
+
+                            <div class="input-group mb-3">
+                                <input id="IFImagen" type='file' class="form-control" name="IFImagen" onchange="validateFile(this), readURL(this);  " />
+                            </div>
+                            @if (Model.File != null)
+                            {
+
+                                <img id="Img" src="data:image/*;base64,@Model.File" style="width:200px ; height:200px" />
+
+                            }
+                            else
+                            {
+                                <img id="Img" src="~/Imagenes/sinProducto.png" style="width:200px ; height:200px" />
+                            }
+                        </div>
+                        @Html.HiddenFor(model => model.File)
+                    </div>
+
+                    <div class="form-group">
+                        <div class=" col-md-3">
+
+                            <input type="submit" value="Guardar" class="btn btn-success" />
+                            @Html.ActionLink("Regresar", "GetAll", "Copys", htmlAttributes: new { @class = "btn btn-danger" })
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+    @section Scripts
+    {
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+
+
+    <script type="text/javascript">
+                $( function() {
+          $( "#txtFechaNacimiento" ).datepicker({dateFormat: 'dd-mm-yy',
+                                      changeMonth: true,
+                                      changeYear: true});
+        } );
+
+
+                function validateFile()
+                   {
+                       var allowedExtension = ['jpeg', 'jpg','png'];
+                       var fileExtension = document.getElementById('IFImagen').value.split('.').pop().toLowerCase();
+                       var isValidFile = false;
+                           for(var index in allowedExtension) {
+                               if(fileExtension === allowedExtension[index]) {
+                                   isValidFile = true;
+                                   break;
+                               }
+                           }
+                           if(!isValidFile) {
+                               alert('Las extensiones permitidas son : *.' + allowedExtension.join(', *.'));
+                               document.getElementById('IFImagen').value = ""
+                           }
+                           return isValidFile;
+                   }
+                    function readURL(input) {
+                    if (input.files && input.files[0]) {
+                        var reader = new FileReader();
+                        reader.onload = function (e) {
+                            $('#Img')
+                              .attr('src', e.target.result);
+                        };
+                        reader.readAsDataURL(input.files[0]);
+                    }
+                }
+
+    </script>
+
+    }

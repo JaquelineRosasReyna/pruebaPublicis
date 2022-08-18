@@ -1,0 +1,93 @@
+﻿@model ML.Copys
+@{
+    ViewData["Title"] = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <h2> PRODUCTOS </h2>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <h5>Seleccione el producto para editarla o el botón de + para agregar un nuevo producto</h5>
+            <hr />
+        </div>
+    </div>
+
+
+
+    <div style="float:right;">
+        @Html.ActionLink("+", "Form", "Producto", htmlAttributes: new { @class = "btn btn-success" })
+    </div>
+    @if (Model.Copies == null)
+    {
+        <div class="p-3 mb-2 bg-danger text-withe"> Aun no hay registros registardos</div>
+
+    }
+    else
+    {
+        <table class=" table table-bordered table-responsive">
+            <thead>
+                <tr>
+                    <td class=" text-center"> Editar </td>
+
+                    <td class="d-lg-none">Id</td>
+                    <td class="text-center">Medio</td>
+                    <td class="text-center">Fecha</td>
+                    <td class="text-center">Marca</td>
+                    <td class="text-center">Producto</td>
+                    <td class="text-center">Version</td>
+                    <td class="text-center">Vehiculo</td>
+                    <td class="text-center">Anunciante</td>
+                    <td class="text-center">Tema</td>
+                    <td class="d-lg-none">Id_Category</td>
+                    <td class="text-center">Category</td>
+                    <td class="text-center">Processing</td>
+                    <td class="text-center">File</td>
+
+
+                    <td class="text-center">Eliminar</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (ML.Copys copys in Model.Copies)
+                {
+                    <tr>
+                        <td class="text-center"><a class="btn btn-warning glyphicon glyphicon-edit" href="@Url.Action("Form","Copys",new { Id= copys.Id })"><i class="bi bi-pencil-square"></i></a></td>
+
+                        <td class="d-lg-none">@copys.Id</td>
+                        <td class="text-center">@copys.Medio</td>
+                        <td class="text-center">@copys.Fecha</td>
+                        <td class="text-center">@copys.Marca</td>
+                        <td class="text-center">@copys.Producto</td>
+                        <td class="text-center">@copys.Version</td>
+                        <td class="text-center">@copys.Vehiculo</td>
+                        <td class="text-center">@copys.Anunciante</td>
+                        <td class="text-center">@copys.Tema</td>
+                        <td class="d-lg-none">@copys.Categories.Id</td>
+                        <td class="text-center">@copys.Categories.Name</td>
+                        <td class="text-center">@copys.Processing</td>
+                        <td class="text-center">
+                            @if (copys.File != "")
+                            {
+
+                                <img id="Img" src="data:image/*;base64,@copys.File" style="width:80px ; height:80px" />
+
+                            }
+                            else
+                            {
+                                <img id="Img" src="~/Imagenes/sinProducto.png" style="width:80px ; height:80px" />
+                            }
+                        </td>
+
+                        <td class="text-center"><a class="btn btn-danger glyphicon glyphicon-trash" href="@Url.Action("Delete", "Copys", new { Id = copys.Id})" onclick="return confirm('Estas seguro que deseas eliminar este producto?');"><i class="bi bi-eraser-fill"></i></a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+
